@@ -39,7 +39,7 @@ app.use(`${api}/password`,passwordRouter)
 //Connecting to database
 
 mongoose
-  .connect(process.env.CONNECTION_STRING, {
+  .connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     dbName: "key_secure",
