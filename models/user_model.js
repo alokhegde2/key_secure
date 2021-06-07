@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  authType:{
+    type:String,
+    default:"normal"
+  },
   masterPassword: {
     type: String,
     default: "",
