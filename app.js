@@ -23,16 +23,15 @@ app.use(cors());
 app.options("*", cors());
 
 //Middlewares
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
 
 //All route middlewares goes here
-
 app.use(`${api}/user`, userRoute);
 app.use(`${api}/password`, passwordRoute);
 
 //Connecting to mongodb database
-
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
@@ -47,7 +46,7 @@ mongoose
   });
 
 //Initializing port
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //Running server
 app.listen(port, () => {
