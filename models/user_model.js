@@ -22,6 +22,19 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  status: {
+    type: String, 
+    enum: ['Pending', 'Active'],
+    default: 'Pending'
+  },
+  confirmationCode: { 
+    type: String, 
+    unique: true 
+  },
+  avatar:{
+    type:String,
+    default:""
+  },
   authType:{
     type:String,
     default:"normal"
