@@ -13,9 +13,8 @@ const {
 } = require("../helpers/validation");
 const { func } = require("joi");
 
-
 //Sending confirmation mail function
-async function SendMail(token,email,name) {
+async function SendMail(token, email, name) {
   const body = `
   <body style="background-color:#EEEEEE;border-radius:20px">
     <div style="margin:20px;display:flex;flex-direction:row;flex-wrap: wrap;justify-content: space-around;">
@@ -41,8 +40,8 @@ async function SendMail(token,email,name) {
   `;
   //Admin mail and password
   const admin_mail = process.env.MAIL_ID;
-  const admin_pass = process.env.PASSWORD;  
-  console.log(admin_mail,admin_pass)
+  const admin_pass = process.env.PASSWORD;
+  console.log(admin_mail, admin_pass);
 
   let transporter = nodemailer.createTransport({
     // host: "mail.google.com",
@@ -69,9 +68,7 @@ async function SendMail(token,email,name) {
   // Preview only available when sending through an Ethereal account
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-
 }
-
 
 //All user routes goes here
 
@@ -94,7 +91,7 @@ router.post("/register", async (req, res) => {
   //Creating confiration route
   const secret = process.env.SECRET;
   //creating token
-  const token = jwt.sign({email:req.body.email},secret);
+  const token = jwt.sign({ email: req.body.email }, secret);
   //Hashing the password
   //creating salt for hashing
   const salt = await bcrypt.genSalt(10);
@@ -107,19 +104,19 @@ router.post("/register", async (req, res) => {
     email: req.body.email,
     hashedPassword: hashPassword,
     authType: req.body.authType,
-    confirmationCode:token
+    confirmationCode: token,
   });
 
   try {
     savedUser = await user.save();
-    SendMail(token,req.body.email,req.body.name)
+    SendMail(token, req.body.email, req.body.name);
     res.status(200).send({ message: "User registered successfully" });
   } catch (error) {
     res.status(400).send(error);
   }
 });
 
-//Add the master password
+/*Add the master password*/
 router.put("/new-master-pass/:id", async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
     return res.status(400).json({ message: "User not found" });
@@ -152,10 +149,44 @@ router.put("/new-master-pass/:id", async (req, res) => {
   }
 });
 
+//Confirmation email route
+router.get("/verify-user/:confirmationCode", async (req, res) => {
+  //finding the confirmation code
+  //It will return the entire user data whose code is matching
+  const user = await User.find({
+    confirmationCode: req.params.confirmationCode,
+  });
 
+  //declaring the id
+  var id;
 
- 
+  //if user not found
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
 
+  //finding the user id from the data
+  user.forEach(function (fu) {
+    //access all the attributes of the document here
+    id = fu._id;
+  });
+
+  //Updating the status to active
+  const updated_user = await User.findByIdAndUpdate(
+    id,
+    {
+      status: "Active",
+    },
+    { new: true }
+  );
+
+  //finding sending update status
+  if (!updated_user) {
+    return res.status(400).json({ message: "User is not verified" });
+  } else {
+    return res.status(200).json({ message: "User verified" });
+  }
+});
 
 //Exporting the user module
 module.exports = router;
