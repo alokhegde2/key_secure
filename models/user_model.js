@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
 });
 
 //Creating virtual id
-userSchema.virtual("id").get(() => {
+userSchema.virtual("id").get(function(){
   return this._id.toHexString();
 });
 
