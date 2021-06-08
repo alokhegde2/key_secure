@@ -10,7 +10,6 @@ const {
   loginValidation,
   newMasterPasswordValidation,
 } = require("../helpers/validation");
-const { required } = require("joi");
 
 //All user routes goes here
 
@@ -30,6 +29,11 @@ router.post("/register", async (req, res) => {
     return res.status(400).json({ message: "Email already exist" });
   }
 
+  //Creating confiration route
+  const secret = process.env.SECRET;
+  //creating token
+  const token = jwt.sign({email:req.body.email},secret);
+  console.log(token)
   //Hashing the password
   //creating salt for hashing
   const salt = await bcrypt.genSalt(10);
@@ -42,6 +46,7 @@ router.post("/register", async (req, res) => {
     email: req.body.email,
     hashedPassword: hashPassword,
     authType: req.body.authType,
+    confirmationCode:token
   });
 
   try {
@@ -84,6 +89,12 @@ router.put("/new-master-pass/:id", async (req, res) => {
     return res.status(200).json({ message: "Master password created" });
   }
 });
+
+router.put("/verify/:id", async (req,res) =>{
+  
+})
+ 
+
 
 //Exporting the user module
 module.exports = router;
