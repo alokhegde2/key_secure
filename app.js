@@ -23,6 +23,8 @@ app.use(cors());
 app.options("*", cors());
 
 //Middlewares
+//Middleware to serve static files
+app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
@@ -30,6 +32,8 @@ app.use(morgan("tiny"));
 //All route middlewares goes here
 app.use(`${api}/user`, userRoute);
 app.use(`${api}/password`, passwordRoute);
+//http://localhost:3000/api/v2/static/images/alp_icons/A.png   --- to get the image
+app.use(`${api}/static`, express.static('public'));
 
 //Connecting to mongodb database
 mongoose
