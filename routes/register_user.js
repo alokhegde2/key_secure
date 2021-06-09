@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
+const path = require("path");
 //importing dot env
 require("dotenv/config");
 
@@ -19,7 +20,12 @@ const api = process.env.API_URL;
 
 //Sending confirmation mail function
 async function SendMail(token, email, name) {
-  const url = `${req.protocol}://${req.get("host")}/${api}/register/verify-user/${token}`;
+  //url for confirming mail
+  const url = `${req.protocol}://${req.get(
+    "host"
+  )}/${api}/register/verify-user/${token}`;
+
+  //body of the mail
   const body = `
   <body style="background-color:#EEEEEE;border-radius:20px">
     <div style="margin:20px;display:flex;flex-direction:row;flex-wrap: wrap;justify-content: space-around;">
@@ -43,6 +49,7 @@ async function SendMail(token, email, name) {
     </div>
     </body>
   `;
+
   //Admin mail and password
   const admin_mail = process.env.MAIL_ID;
   const admin_pass = process.env.PASSWORD;
@@ -189,9 +196,10 @@ router.get("/verify-user/:confirmationCode", async (req, res) => {
   if (!updated_user) {
     return res.status(400).json({ message: "User is not verified" });
   } else {
-    return res.status(200).json({ message: "User verified" });
+    return res.status(200).sendFile(
+      path.join(__dirname, "../", "/public/templates/auth/verified.html") //If user is verified we are sending html file
+    );
   }
 });
-
 //Exporting the user module
 module.exports = router;
