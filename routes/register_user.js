@@ -4,6 +4,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
+//importing dot env
+require("dotenv/config");
 
 const User = require("../models/user_model");
 const {
@@ -13,8 +15,11 @@ const {
 } = require("../helpers/validation");
 const { func } = require("joi");
 
+const api = process.env.API_URL;
+
 //Sending confirmation mail function
 async function SendMail(token, email, name) {
+  const url = `${req.protocol}://${req.get("host")}/${api}/register/verify-user/${token}`;
   const body = `
   <body style="background-color:#EEEEEE;border-radius:20px">
     <div style="margin:20px;display:flex;flex-direction:row;flex-wrap: wrap;justify-content: space-around;">
@@ -26,9 +31,9 @@ async function SendMail(token, email, name) {
         <h4 style="color:#3A4043">Hi ${name},</h4>
         <p style="color:#363636">You have successfully created a Key Secure account,<br/>Please click on the link below to verify your email<br/> address and complete your registration</p>
     <br/>
-    <a href="${token}"><button style="background-color:#768bf5;border:none;padding:10px;margin-bottom:10px;color:white;border-radius:5px;cursor:pointer">Verify your email</button></a><br/>
+    <a href="${url}"><button style="background-color:#768bf5;border:none;padding:10px;margin-bottom:10px;color:white;border-radius:5px;cursor:pointer">Verify your email</button></a><br/>
     <small style="color:#7d7d7d">or copy and paste this link into your browser:</small><br/>
-    <a href="https://google.com"style="font-size:12px;color:#76a0f5;">https://google.com</a><br/><br/>
+    <a href="${url}"style="font-size:12px;color:#76a0f5;">${url}</a><br/><br/>
     <small style="color:#7d7d7d;">Didn't create a Key Seure account? It's likely someone just typed in your email<br/>address by accident.Feel free to ignore this email</small><br/><br/>
       </center>
     </div>
