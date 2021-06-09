@@ -10,7 +10,6 @@
       integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="index.css" />
     <title>Key Secure-Reset Password</title>
   </head>
   <body>
@@ -32,12 +31,10 @@
         flex-direction: column;
       "
     >
-    <h5 style="margin-bottom: 20px;">Reset Password</h5>
-      <form>
+      <h5 style="margin-bottom: 20px">Reset Password</h5>
+      <form id="form">
         <div class="mb-3">
-          <label for="Email" class="form-label"
-            >Email </label
-          >
+          <label for="Email" class="form-label">Email </label>
           <input
             type="email"
             class="form-control"
@@ -47,27 +44,101 @@
         </div>
         <div class="mb-3">
           <label for="Password" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-          />
+          <input type="password" class="form-control" id="password" />
           <div id="emailHelp" class="form-text">
             Your password must be 8-20 characters long, contain letters and
             numbers, and must not contain spaces, special characters,
           </div>
         </div>
         <div class="mb-3">
-            <label for="confirmPassword" class="form-label">Confirm Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="confirmPassword"
-            />
-          </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+          <label for="confirmPassword" class="form-label"
+            >Confirm Password</label
+          >
+          <input type="password" class="form-control" id="confirmPassword" />
+        </div>
+        <div id="error" class="form-text align-middle" style="color: red"></div>
+        <button type="submit" class="btn btn-primary mt-2" style="width: 100%">
+          Submit
+        </button>
       </form>
+      <div class="alert alert-success mt-2" role="alert" id="success" style="visibility: hidden;">
+      </div>
     </div>
+    <script>
+      const email = document.getElementById("email");
+      const password = document.getElementById("password");
+      const confirmPassword = document.getElementById("confirmPassword");
+      const form = document.getElementById("form");
+      const error = document.getElementById("error");
+      const success = document.getElementById("success")
+
+      let isError = false;
+
+      //Get fieldname
+      function getFieldName(input) {
+        return input.id.charAt(0).toUpperCase() + input.id.slice(1);
+      }
+
+      function checkRequired(inputArr) {
+        inputArr.forEach((input) => {
+          if (input.value.trim() === "") {
+            error.innerHTML = `${getFieldName(input)} is required`;
+            isError = true;
+          } else {
+            isError = false;
+            error.innerHTML = "";
+          }
+        });
+      }
+
+      //checking for both passwords are same
+      function checkMatch(pass, confirmPass) {
+        if (pass.value === confirmPass.value) {
+          isError = false;
+          error.innerHTML = "";
+        } else {
+          isError = true;
+          error.innerHTML = "Passwords are not matching";
+        }
+      }
+
+      //doing the post request to the server
+      async function submitForm(mail, pass, confirmPass) {
+        const url = window.location.href;
+        const user_id = url.slice(url.length-24);
+        const response = await fetch(
+          "http://localhost:3000/api/v2/user/login/forgot-pass/reset",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              id: user_id,
+              email: mail.value,
+              password: pass.value,
+            }),
+            headers: {
+              "Content-type": "application/json",
+            },
+          }
+        );
+        var data = await response.json();
+        if (response.status == 200) {
+          error.innerHTML = "";
+          success.style.visibility="visible";
+          success.innerText ="Password Updated Successfully!!!";
+        } else if (response.status == 400) {
+          error.innerHTML = data["message"];
+        }
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        checkRequired([confirmPassword, password, email]);
+        checkMatch(password, confirmPassword);
+        if (!isError) {
+          submitForm(email, password, confirmPassword);
+        }
+      });
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
