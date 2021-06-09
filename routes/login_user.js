@@ -28,6 +28,10 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ message: "Email not found" });
   }
 
+  if(user.status == "Pending"){
+    return res.status(400).json({message:"User is not verified"})
+  }
+
   const validPass = await bcrypt.compare(
     req.body.password,
     user.hashedPassword
@@ -52,6 +56,10 @@ router.post("/", async (req, res) => {
   //returning succes with header auth-token
   return res.status(200).header("auth-token", token).send(token);
 });
+
+
+//verifing master password
+
 
 //Exporting login user
 module.exports = router;
