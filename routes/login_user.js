@@ -28,8 +28,8 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ message: "Email not found" });
   }
 
-  if(user.status == "Pending"){
-    return res.status(400).json({message:"User is not verified"})
+  if (user.status == "Pending") {
+    return res.status(400).json({ message: "User is not verified" });
   }
 
   const validPass = await bcrypt.compare(
@@ -57,9 +57,32 @@ router.post("/", async (req, res) => {
   return res.status(200).header("auth-token", token).send(token);
 });
 
-
 //verifing master password
+router.post("/verify-master/:id", async (req, res) => {
+  console.log(req.params.id);
+  //Finding th user
+  const user = await User.findOne({ _id: req.params.id });
 
+  //if user not found it will return error
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  //Check for password correctness
+  //compares user entered master pass and actual master pass
+  const verifyMaster = await bcrypt.compare(
+    req.body.masterPassword,
+    user.masterPassword
+  );
+
+  //If password does't match
+  if (!verifyMaster) {
+    return res.status(400).json({ message: "Incorrect Master password" });
+  }
+
+  //if password correct
+  res.status(200).json({ message: "Correct master pass" });
+});
 
 //Exporting login user
 module.exports = router;
