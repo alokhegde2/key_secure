@@ -16,6 +16,7 @@ const app = express();
 
 //Routes
 const registerUserRoute = require("./routes/register_user");
+const loginUserRoute = require("./routes/login_user");
 const passwordRoute = require("./routes/password_route");
 
 //CORS
@@ -31,6 +32,7 @@ app.use(morgan("tiny"));
 
 //All route middlewares goes here
 app.use(`${api}/user/register/`, registerUserRoute);
+app.use(`${api}/user/login/` , loginUserRoute);
 app.use(`${api}/password`, passwordRoute);
 //http://localhost:3000/api/v2/static/images/alp_icons/A.png   --- to get the image
 app.use(`${api}/static`, express.static('public'));
@@ -40,6 +42,7 @@ mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
     dbName: "Key-Secure-v2",
   })
   .then(() => {
