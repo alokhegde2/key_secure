@@ -73,7 +73,7 @@ async function SendMail(token, email, name) {
 //All user routes goes here
 
 //Register the new user
-router.post("/register", async (req, res) => {
+router.post("/", async (req, res) => {
   //Validating the data before creating the user
 
   const { error } = registerValidation(req.body);
