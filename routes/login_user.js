@@ -28,15 +28,18 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ message: "Email not found" });
   }
 
+  //If user not verified they are not able to login
   if (user.status == "Pending") {
     return res.status(400).json({ message: "User is not verified" });
   }
 
+  //comparing two passwords one is user entered and another one is the actual password
   const validPass = await bcrypt.compare(
     req.body.password,
     user.hashedPassword
   );
-
+  
+  //If passwords do not match
   if (!validPass) {
     return res.status(400).json({ message: "Invalid password" });
   }
@@ -44,6 +47,7 @@ router.post("/", async (req, res) => {
   //importing secret password
   const secret = process.env.SECRET;
 
+  //Creating jwt
   const token = jwt.sign(
     {
       id: user.id,
