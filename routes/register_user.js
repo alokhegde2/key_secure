@@ -11,7 +11,6 @@ require("dotenv/config");
 const User = require("../models/user_model");
 const {
   registerValidation,
-  loginValidation,
   newMasterPasswordValidation,
 } = require("../helpers/validation");
 const { func } = require("joi");
