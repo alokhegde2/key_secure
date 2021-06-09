@@ -15,7 +15,7 @@ const api = process.env.API_URL;
 const app = express();
 
 //Routes
-const registerUserRoute = require("./routes/register_route");
+const registerUserRoute = require("./routes/register_user");
 const passwordRoute = require("./routes/password_route");
 
 //CORS
