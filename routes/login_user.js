@@ -3,12 +3,15 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const path = require("path");
 
 //importing dotenv
 require("dotenv/config");
 
 //Importing user model
 const User = require("../models/user_model");
+//Importing mail module
+const Mail = require("../helpers/mail");
 
 const { loginValidation } = require("../helpers/validation");
 
@@ -38,7 +41,7 @@ router.post("/", async (req, res) => {
     req.body.password,
     user.hashedPassword
   );
-  
+
   //If passwords do not match
   if (!validPass) {
     return res.status(400).json({ message: "Invalid password" });
@@ -63,8 +66,12 @@ router.post("/", async (req, res) => {
 
 //verifing master password
 router.post("/verify-master/:id", async (req, res) => {
-  console.log(req.params.id);
-  //Finding th user
+  //to verify the entered id is correct or not
+  if (!mongoose.isValidObjectId(req.body.id)) {
+    return res.status(400).json({ message: "Invalid user id" });
+  }
+
+  //Finding the user
   const user = await User.findOne({ _id: req.params.id });
 
   //if user not found it will return error
@@ -86,6 +93,66 @@ router.post("/verify-master/:id", async (req, res) => {
 
   //if password correct
   res.status(200).json({ message: "Correct master pass" });
+});
+
+//Forgot Password route
+router.post("/forgot-pass", async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return res.status(400).json({ message: "Email not found" });
+  }
+
+  Mail("dfhdfisufjksfof", "Alok", "Alok");
+});
+
+//password resetting route
+router.get("/forgot-pass/reset/:id", (req, res) => {
+  return res.sendFile(
+    path.join(__dirname, "../", "/public/templates/auth/forgot-pass/index.html")
+  );
+});
+
+//updating password
+router.post("/forgot-pass/reset", async (req, res) => {
+  //to verify the entered id is correct or not
+  if (!mongoose.isValidObjectId(req.body.id)) {
+    return res.status(400).json({ message: "Invalid user id" });
+  }
+
+  //Getting the user details using id
+  const user = await User.findOne({ _id: req.body.id });
+
+  //if user not found
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  //checking for entered mail and original mail
+  if (req.body.email !== user.email) {
+    return res.status(400).json({ message: "Incorrect email id" });
+  }
+
+  //Hashing the password
+  //creating salt for hashing
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+  //Updating the password
+  const updatedUser = await User.findByIdAndUpdate(
+    req.body.id,
+    {
+      hashedPassword: hashPassword,
+    },
+    { new: true }
+  );
+
+  //checking for is password updated or not
+  if (!updatedUser) {
+    return res.status(400).json({ message: "Unable to reset password" });
+  }
+
+  return res.status(200).json({ message: "Password updated successfully" });
 });
 
 //Exporting login user
