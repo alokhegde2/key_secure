@@ -12,8 +12,10 @@ require("dotenv/config");
 const User = require("../models/user_model");
 //Importing mail module
 const Mail = require("../helpers/mail");
+//importing verify package to verify
+const verify = require("../helpers/verify_token");
 
-const { loginValidation } = require("../helpers/validation");
+const { loginValidation,resetMasterPasswordValidation } = require("../helpers/validation");
 
 //All routes goes here
 router.post("/", async (req, res) => {
@@ -103,7 +105,10 @@ router.post("/forgot-pass", async (req, res) => {
     return res.status(400).json({ message: "Email not found" });
   }
 
-  Mail("dfhdfisufjksfof", "Alok", "Alok");
+  //Sending password reset mail
+  Mail(user.id, user.email, user.name, "forgot");
+
+  return res.status(200).json({ message: "Reset mail sent" });
 });
 
 //password resetting route
@@ -153,6 +158,51 @@ router.post("/forgot-pass/reset", async (req, res) => {
   }
 
   return res.status(200).json({ message: "Password updated successfully" });
+});
+
+//Forgot master pass
+router.post("/forgot-master-pass", verify, async (req, res) => {
+  //checking for correctness of the user id
+  if (!mongoose.isValidObjectId(req.body.id)) {
+    return res.status(400).json({ message: "Invalid user id" });
+  }
+
+  const {error} = resetMasterPasswordValidation(req.body);
+
+  if(error){
+    console.log(error)
+    return res.status(400).json({message:"Invalid Master Password"})
+  }
+
+  //finding user using user id
+  const user = await User.findOne({ _id: req.body.id });
+
+  //if user not found
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+    //Hashing the masterPassword
+  //creating salt for hashing
+  const salt = await bcrypt.genSalt(10);
+  const hashedMasterPassword = await bcrypt.hash(req.body.masterPassword, salt);
+
+  //Updating the master password
+  const updated_master = await User.findByIdAndUpdate(
+    req.body.id,
+    {
+      masterPassword: hashedMasterPassword,
+    },
+    { new: true }
+  );
+
+  //if password is not updated
+  if (!updated_master) {
+    return res.status(400).json({ message: "Master Password is not updated" });
+  }
+
+  //if password is updated
+  return res.status(200).json({ message: "Master password updated" });
 });
 
 //Exporting login user
