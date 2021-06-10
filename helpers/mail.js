@@ -7,11 +7,11 @@ const api = process.env.API_URL;
 
 //Sending confirmation mail function
 module.exports = async function SendMail(token, email, name, bodyType) {
-    //url for confirming mail
-    const url = `http://localhost:3000${api}/user/register/verify-user/${token}`;
+  //url for confirming mail
+  const url = `http://localhost:3000${api}/user/register/verify-user/${token}`;
 
-    //url for reset password page
-    const reset_url = `http://localhost:3000${api}/user/login/forgot-pass/reset/${token}`;
+  //url for reset password page
+  const reset_url = `http://localhost:3000${api}/user/login/forgot-pass/reset/${token}`;
 
   //mail body dictionary
   const mailBody = {
@@ -62,9 +62,9 @@ module.exports = async function SendMail(token, email, name, bodyType) {
 
   //DIctionary for mail subject
   const mailSubject = {
-    confirm :"Please confirm your account",
-    forgot :"Link to reset your password"
-  }
+    confirm: "Please confirm your account",
+    forgot: "Link to reset your password",
+  };
 
   //body of the mail
   const body = mailBody[bodyType];
