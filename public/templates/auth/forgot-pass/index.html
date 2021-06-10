@@ -57,7 +57,7 @@
           <input type="password" class="form-control" id="confirmPassword" />
         </div>
         <div id="error" class="form-text align-middle" style="color: red"></div>
-        <button type="submit" class="btn btn-primary mt-2" style="width: 100%">
+        <button type="submit" class="btn btn-primary mt-2" style="width: 100%" id="submit-button">
           Submit
         </button>
       </form>
@@ -70,7 +70,8 @@
       const confirmPassword = document.getElementById("confirmPassword");
       const form = document.getElementById("form");
       const error = document.getElementById("error");
-      const success = document.getElementById("success")
+      const success = document.getElementById("success");
+      const button = document.getElementById("submit-button")
 
       let isError = false;
 
@@ -104,6 +105,7 @@
 
       //doing the post request to the server
       async function submitForm(mail, pass, confirmPass) {
+        button.innerText="submitting..."
         const url = window.location.href;
         const user_id = url.slice(url.length-24);
         const response = await fetch(
@@ -122,6 +124,7 @@
         );
         var data = await response.json();
         if (response.status == 200) {
+          button.innerText="Submitted"
           error.innerHTML = "";
           success.style.visibility="visible";
           success.innerText ="Password Updated Successfully!!!";
