@@ -15,7 +15,10 @@ const Mail = require("../helpers/mail");
 //importing verify package to verify
 const verify = require("../helpers/verify_token");
 
-const { loginValidation,resetMasterPasswordValidation } = require("../helpers/validation");
+const {
+  loginValidation,
+  resetMasterPasswordValidation,
+} = require("../helpers/validation");
 
 //All routes goes here
 router.post("/", async (req, res) => {
@@ -167,11 +170,11 @@ router.post("/forgot-master-pass", verify, async (req, res) => {
     return res.status(400).json({ message: "Invalid user id" });
   }
 
-  const {error} = resetMasterPasswordValidation(req.body);
+  const { error } = resetMasterPasswordValidation(req.body);
 
-  if(error){
-    console.log(error)
-    return res.status(400).json({message:"Invalid Master Password"})
+  if (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Invalid Master Password" });
   }
 
   //finding user using user id
@@ -182,7 +185,7 @@ router.post("/forgot-master-pass", verify, async (req, res) => {
     return res.status(400).json({ message: "User not found" });
   }
 
-    //Hashing the masterPassword
+  //Hashing the masterPassword
   //creating salt for hashing
   const salt = await bcrypt.genSalt(10);
   const hashedMasterPassword = await bcrypt.hash(req.body.masterPassword, salt);
