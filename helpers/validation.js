@@ -7,7 +7,7 @@ const registerValidation = (data) => {
     name: Joi.string().min(2),
     email: Joi.string().min(6).required().email(),
     password: Joi.string().min(6).required(),
-    authType:Joi.string().required()
+    authType: Joi.string().required(),
   });
 
   return schema.validate(data);
@@ -34,7 +34,16 @@ const newMasterPasswordValidation = (data) => {
   return schema.validate(data);
 };
 
+const resetMasterPasswordValidation = (data) => {
+  const schema = Joi.object({
+    id: Joi.string(),
+    masterPassword: Joi.string().min(4).max(4),
+  });
+  return schema.validate(data);
+};
+
 //Exporting modules
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.newMasterPasswordValidation = newMasterPasswordValidation;
+module.exports.resetMasterPasswordValidation = resetMasterPasswordValidation;
