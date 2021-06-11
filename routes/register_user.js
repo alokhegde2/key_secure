@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
 
   try {
     savedUser = await user.save();
-    Mail(token, req.body.email, req.body.name, "confirm");
+    Mail(token, req.body.email, req.body.name, "confirm",req);
     res.status(200).send({ message: "User registered successfully" });
   } catch (error) {
     res.status(400).send(error);

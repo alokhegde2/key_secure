@@ -6,12 +6,22 @@ require("dotenv/config");
 const api = process.env.API_URL;
 
 //Sending confirmation mail function
-module.exports = async function SendMail(token, email, name, bodyType) {
+module.exports = async function SendMail(
+  token,
+  email,
+  name,
+  bodyType,
+  request
+) {
   //url for confirming mail
-  const url = `http://localhost:3000${api}/user/register/verify-user/${token}`;
+  const url = `${req.protocol}://${req.get(
+    "host"
+  )}${api}/user/register/verify-user/${token}`;
 
   //url for reset password page
-  const reset_url = `http://localhost:3000${api}/user/login/forgot-pass/reset/${token}`;
+  const reset_url = `${req.protocol}://${req.get(
+    "host"
+  )}${api}/user/login/forgot-pass/reset/${token}`;
 
   //mail body dictionary
   const mailBody = {

@@ -109,7 +109,7 @@ router.post("/forgot-pass", async (req, res) => {
   }
 
   //Sending password reset mail
-  Mail(user.id, user.email, user.name, "forgot");
+  Mail(user.id, user.email, user.name, "forgot",req);
 
   return res.status(200).json({ message: "Reset mail sent" });
 });
