@@ -42,8 +42,26 @@ const resetMasterPasswordValidation = (data) => {
   return schema.validate(data);
 };
 
+const changePassword = (data) =>{
+  const schema = Joi.object({
+    password:Joi.string().max(20).min(6),
+    newPassword:Joi.string().max(20).min(6)
+  });
+  return schema.validate(data);
+}
+
+const changeMasterPassword = (data) =>{
+  const schema = Joi.object({
+    masterPassword:Joi.string().max(4).min(4),
+    newMasterPassword:Joi.string().max(4).min(4)
+  });
+  return schema.validate(data);
+}
+
 //Exporting modules
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.newMasterPasswordValidation = newMasterPasswordValidation;
 module.exports.resetMasterPasswordValidation = resetMasterPasswordValidation;
+module.exports.changePassword = changePassword;
+module.exports.changeMasterPassword = changeMasterPassword;
