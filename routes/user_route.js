@@ -15,7 +15,10 @@ const User = require("../models/user_model");
 //importing verify package to verify
 const verify = require("../helpers/verify_token");
 //importing validation
-const { changePassword } = require("../helpers/validation");
+const {
+  changePassword,
+  changeMasterPassword,
+} = require("../helpers/validation");
 
 //File upload functionality
 //Alowed file type
@@ -207,6 +210,71 @@ router.put("/change-pass/:id", verify, async (req, res) => {
 
   //if password is updated
   return res.status(200).json({ message: "Password updated successfuly" });
+});
+
+//change master password
+
+router.put("/change-master-pass/:id", verify, async (req, res) => {
+  //validating id
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).json({ message: "Invalid user id" });
+  }
+
+  //validating user inputs
+  const { error } = changeMasterPassword(req.body);
+
+  //if any error
+  if (error) {
+    return res.status(400).json({ message: `${error.details[0].message}` });
+  }
+
+  //user inputs validated
+  //getting user details
+  const user = await User.findOne({ _id: req.params.id });
+
+  //if user not found
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  //if user found
+  //check for master password enterd will match
+  const isMasterPasswordMatch = await bcrypt.compare(
+    req.body.masterPassword,
+    user.masterPassword
+  );
+
+  //if passwords are not matching
+  if (!isMasterPasswordMatch) {
+    return res.status(400).json({ message: "Master password is not matching" });
+  }
+
+  //if password matched
+  //hashing newMasterPassword
+  const salt = await bcrypt.genSalt(10);
+  const hashedMasterPassword = await bcrypt.hash(
+    req.body.newMasterPassword,
+    salt
+  );
+
+  //updating masterPassword
+  const updatedUser = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      masterPassword: hashedMasterPassword,
+    },
+    { new: true }
+  );
+
+  //if masterPassword is not updated
+  if (!updatedUser) {
+    return res.status(400).json({ message: "Master Password not updated" });
+  }
+
+  //if master password is updated
+  return res
+    .status(200)
+    .json({ message: "Master password updated successfuly" });
 });
 
 //Exporting login user
