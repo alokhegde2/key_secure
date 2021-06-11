@@ -14,6 +14,8 @@ require("dotenv/config");
 const User = require("../models/user_model");
 //importing verify package to verify
 const verify = require("../helpers/verify_token");
+//importing validation
+const { changePassword } = require("../helpers/validation");
 
 //File upload functionality
 //Alowed file type
@@ -147,6 +149,65 @@ router.put(
     return res.status(200).json({ message: "User updated" });
   }
 );
+
+//Change password
+
+router.put("/change-pass/:id", verify, async (req, res) => {
+  //Validating user id
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).json({ message: "Invlid object id" });
+  }
+
+  //validating inputs
+  const { error } = changePassword(req.body);
+
+  //if error
+  if (error) {
+    return res.status(400).json({ message: `${error.details[0].message}` });
+  }
+
+  //getting user details using id
+  const user = await User.findOne({ _id: req.params.id });
+
+  //if user not found
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  //if user found
+  //check if both the passwords are matching
+  const isPasswordMatch = await bcrypt.compare(
+    req.body.password,
+    user.hashedPassword
+  );
+
+  //if password donot match
+  if (!isPasswordMatch) {
+    return res.status(400).json({ message: "Password are not matching" });
+  }
+
+  //if password matches
+  //creating salt and hashing the new password
+  const salt = await bcrypt.genSalt(10);
+  const hashedNewPassword = await bcrypt.hash(req.body.newPassword, salt);
+
+  //update the user password with new password
+  const updatedUser = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      hashedPassword: hashedNewPassword,
+    },
+    { new: true }
+  );
+
+  //if password is notupdated
+  if (!updatedUser) {
+    return res.status(400).json({ message: "Password is not updated" });
+  }
+
+  //if password is updated
+  return res.status(200).json({ message: "Password updated successfuly" });
+});
 
 //Exporting login user
 module.exports = router;
