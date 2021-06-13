@@ -185,6 +185,19 @@ router.post("/forgot-master-pass", verify, async (req, res) => {
     return res.status(400).json({ message: "User not found" });
   }
 
+  //Comparing the mails
+  if(req.body.email !== user.email){
+    return res.status(400).json({message:"Incorrect mail id"})
+  }
+
+  //comparing the passwords
+  const passwordMatch = await bcrypt.compare(req.body.password,user.hashedPassword),
+
+  //if passwords not match
+  if(!passwordMatch){
+    return res.status(400).json({message:"Incorrect password"})
+  }
+
   //Hashing the masterPassword
   //creating salt for hashing
   const salt = await bcrypt.genSalt(10);
