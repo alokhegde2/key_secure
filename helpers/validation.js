@@ -37,6 +37,8 @@ const newMasterPasswordValidation = (data) => {
 const resetMasterPasswordValidation = (data) => {
   const schema = Joi.object({
     id: Joi.string(),
+    email:Joi.string().max(20).min(5),
+    password:Joi.string().min(6).max(20),
     masterPassword: Joi.string().min(4).max(4),
   });
   return schema.validate(data);
