@@ -63,14 +63,17 @@ router.post("/", async (req, res) => {
 });
 
 /*Add the master password*/
-router.put("/new-master-pass/:id", async (req, res) => {
-  if (!mongoose.isValidObjectId(req.params.id)) {
-    return res.status(400).json({ message: "User not found" });
-  }
-
+router.put("/new-master-pass/:mail", async (req, res) => {
   const { error } = newMasterPasswordValidation(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
+  }
+
+  const user = await User.findOne({email:req.params.mail});
+
+  //if user not found
+  if(!user){
+    return res.status(400).json({message:"Invalid email"})
   }
 
   //Hashing the masterPassword
@@ -78,15 +81,15 @@ router.put("/new-master-pass/:id", async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedMasterPassword = await bcrypt.hash(req.body.masterPassword, salt);
 
-  const user = await User.findByIdAndUpdate(
-    req.params.id,
+  const updatedUser = await User.findByIdAndUpdate(
+    user.id,
     {
       masterPassword: hashedMasterPassword,
     },
     { new: true }
   );
 
-  if (!user) {
+  if (!updatedUser) {
     return res
       .status(400)
       .json({ message: "Master password cannot be created" });
