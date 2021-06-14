@@ -191,7 +191,7 @@ router.post("/forgot-master-pass", verify, async (req, res) => {
   }
 
   //comparing the passwords
-  const passwordMatch = await bcrypt.compare(req.body.password,user.hashedPassword),
+  const passwordMatch = await bcrypt.compare(req.body.password,user.hashedPassword);
 
   //if passwords not match
   if(!passwordMatch){
