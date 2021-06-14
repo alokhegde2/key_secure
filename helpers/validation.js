@@ -28,7 +28,7 @@ const loginValidation = (data) => {
 
 const newMasterPasswordValidation = (data) => {
   const schema = Joi.object({
-    masterPassword: Joi.string().min(4).max(4),
+    masterPassword: Joi.string().min(6).max(20),
   });
 
   return schema.validate(data);
@@ -39,7 +39,7 @@ const resetMasterPasswordValidation = (data) => {
     id: Joi.string(),
     email:Joi.string().max(20).min(5),
     password:Joi.string().min(6).max(20),
-    masterPassword: Joi.string().min(4).max(4),
+    masterPassword: Joi.string().min(6).max(20),
   });
   return schema.validate(data);
 };
@@ -54,8 +54,8 @@ const changePassword = (data) =>{
 
 const changeMasterPassword = (data) =>{
   const schema = Joi.object({
-    masterPassword:Joi.string().max(4).min(4),
-    newMasterPassword:Joi.string().max(4).min(4)
+    masterPassword:Joi.string().max(20).min(6),
+    newMasterPassword:Joi.string().max(20).min(6)
   });
   return schema.validate(data);
 }
