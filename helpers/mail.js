@@ -14,12 +14,12 @@ module.exports = async function SendMail(
   request
 ) {
   //url for confirming mail
-  const url = `${req.protocol}://${req.get(
+  const url = `${request.protocol}://${request.get(
     "host"
   )}${api}/user/register/verify-user/${token}`;
 
   //url for reset password page
-  const reset_url = `${req.protocol}://${req.get(
+  const reset_url = `${request.protocol}://${request.get(
     "host"
   )}${api}/user/login/forgot-pass/reset/${token}`;
 
