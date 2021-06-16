@@ -55,11 +55,28 @@ router.post("/", async (req, res) => {
 
   try {
     savedUser = await user.save();
-    Mail(token, req.body.email, req.body.name, "confirm",req);
+    Mail(token, req.body.email, req.body.name, "confirm", req);
     res.status(200).send({ message: "User registered successfully" });
   } catch (error) {
     res.status(400).send(error);
   }
+});
+
+//check if user is verified or not
+router.get("/verify-mail/:email", async (req, res) => {
+  //Finding that email id is present or not
+  const user = await User.findOne({ email: req.params.email });
+
+  //if user not found
+  if (!user) {
+    return res.status(400).json({ message: "Email not found" });
+  }
+
+  //If user not verified they are not able to login
+  if (user.status == "Pending") {
+    return res.status(400).json({ message: "Mail is not verified" });
+  }
+  return res.status(200).json({ message: "Mail is verified" });
 });
 
 /*Add the master password*/
@@ -69,11 +86,11 @@ router.put("/new-master-pass/:mail", async (req, res) => {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-  const user = await User.findOne({email:req.params.mail});
+  const user = await User.findOne({ email: req.params.mail });
 
   //if user not found
-  if(!user){
-    return res.status(400).json({message:"Invalid email"})
+  if (!user) {
+    return res.status(400).json({ message: "Invalid email" });
   }
 
   //Hashing the masterPassword
