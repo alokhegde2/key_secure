@@ -41,6 +41,11 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ message: "User is not verified" });
   }
 
+  //Checking if user created the master password
+  if (user.masterPassword == "") {
+    return res.status(400).json({ message: "Master Password is not created." });
+  }
+
   //comparing two passwords one is user entered and another one is the actual password
   const validPass = await bcrypt.compare(
     req.body.password,
@@ -109,7 +114,7 @@ router.post("/forgot-pass", async (req, res) => {
   }
 
   //Sending password reset mail
-  Mail(user.id, user.email, user.name, "forgot",req);
+  Mail(user.id, user.email, user.name, "forgot", req);
 
   return res.status(200).json({ message: "Reset mail sent" });
 });
@@ -186,16 +191,19 @@ router.post("/forgot-master-pass", verify, async (req, res) => {
   }
 
   //Comparing the mails
-  if(req.body.email !== user.email){
-    return res.status(400).json({message:"Incorrect mail id"})
+  if (req.body.email !== user.email) {
+    return res.status(400).json({ message: "Incorrect mail id" });
   }
 
   //comparing the passwords
-  const passwordMatch = await bcrypt.compare(req.body.password,user.hashedPassword);
+  const passwordMatch = await bcrypt.compare(
+    req.body.password,
+    user.hashedPassword
+  );
 
   //if passwords not match
-  if(!passwordMatch){
-    return res.status(400).json({message:"Incorrect password"})
+  if (!passwordMatch) {
+    return res.status(400).json({ message: "Incorrect password" });
   }
 
   //Hashing the masterPassword
