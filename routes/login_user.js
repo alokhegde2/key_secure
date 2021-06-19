@@ -71,13 +71,13 @@ router.post("/", async (req, res) => {
   );
 
   //returning succes with header auth-token
-  return res.status(200).header("auth-token", token).send(token);
+  return res.status(200).header("auth-token", token).json({authToken:token});
 });
 
 //verifing master password
 router.post("/verify-master/:id", async (req, res) => {
   //to verify the entered id is correct or not
-  if (!mongoose.isValidObjectId(req.body.id)) {
+  if (!mongoose.isValidObjectId(req.params.id)) {
     return res.status(400).json({ message: "Invalid user id" });
   }
 

@@ -57,12 +57,21 @@
           <input type="password" class="form-control" id="confirmPassword" />
         </div>
         <div id="error" class="form-text align-middle" style="color: red"></div>
-        <button type="submit" class="btn btn-primary mt-2" style="width: 100%" id="submit-button">
+        <button
+          type="submit"
+          class="btn btn-primary mt-2"
+          style="width: 100%"
+          id="submit-button"
+        >
           Submit
         </button>
       </form>
-      <div class="alert alert-success mt-2" role="alert" id="success" style="visibility: hidden;">
-      </div>
+      <div
+        class="alert alert-success mt-2"
+        role="alert"
+        id="success"
+        style="visibility: hidden"
+      ></div>
     </div>
     <script>
       const email = document.getElementById("email");
@@ -71,7 +80,7 @@
       const form = document.getElementById("form");
       const error = document.getElementById("error");
       const success = document.getElementById("success");
-      const button = document.getElementById("submit-button")
+      const button = document.getElementById("submit-button");
 
       let isError = false;
 
@@ -105,11 +114,10 @@
 
       //doing the post request to the server
       async function submitForm(mail, pass, confirmPass) {
-        button.innerText="submitting..."
         const url = window.location.href;
-        const user_id = url.slice(url.length-24);
+        const user_id = url.slice(url.length - 24);
         const response = await fetch(
-          "http://localhost:3000/api/v2/user/login/forgot-pass/reset",
+          "http://192.168.43.173:3000/api/v2/user/login/forgot-pass/reset",
           {
             method: "POST",
             body: JSON.stringify({
@@ -124,11 +132,12 @@
         );
         var data = await response.json();
         if (response.status == 200) {
-          button.innerText="Submitted"
+          button.innerText = "Submitted";
           error.innerHTML = "";
-          success.style.visibility="visible";
-          success.innerText ="Password Updated Successfully!!!";
+          success.style.visibility = "visible";
+          success.innerText = "Password Updated Successfully!!!";
         } else if (response.status == 400) {
+          button.innerText = "Submit";
           error.innerHTML = data["message"];
         }
       }
