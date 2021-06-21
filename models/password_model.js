@@ -10,7 +10,7 @@ const passwordSchema = new mongoose.Schema({
     max: 255
   },
   username: {
-    title: String,
+    type: String,
     max: 255,
     default: "",
   },
@@ -44,7 +44,7 @@ const passwordSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    require: true,
+    required: true,
   },
   date: {
     type: Date,
@@ -53,12 +53,12 @@ const passwordSchema = new mongoose.Schema({
 });
 
 //Creating virtual id
-passwordSchema.virtual("id").get(() => {
+passwordSchema.virtual("id").get(function (){
   return this._id.toHexString();
 });
 
 //Creating virtual userId
-passwordSchema.virtual("userId").get(() => {
+passwordSchema.virtual("user_Id").get(function (){
   return this.userId.toHexString();
 });
 

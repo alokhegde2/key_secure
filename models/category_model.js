@@ -31,6 +31,11 @@ categorySchema.virtual("id").get(function () {
   return this._id.toHexString();
 });
 
+//Creating virtual userId
+categorySchema.virtual("userId").get(function (){
+  return this.userId.toHexString();
+});
+
 categorySchema.set("toJSON", {
   virtuals: true,
 });
