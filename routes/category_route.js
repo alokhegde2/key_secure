@@ -57,4 +57,34 @@ router.post("/new-category", verify, async (req, res) => {
   }
 });
 
+//getting all categories of the specific user
+router.get("/get-category/:user_id", verify, async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.user_id)) {
+    return res.status(400).json({ message: "Invalid user id" });
+  }
+
+  //Checking for user is present or not
+  const user = await User.findOne({_id:req.params.user_id});
+
+  //if user not there
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  //if user present
+  //get the categories on the basis of user id
+  const category = await Category.find({ user_id: req.params.user_id });
+
+  //if category not present/not found
+  if (!category) {
+    return res.status(400).json({ message: "Category not found" });
+  }
+
+  //if category is present
+  return res.status(200).json({ category: category });
+});
+
+//Updating the category
+
+
 module.exports = router;
