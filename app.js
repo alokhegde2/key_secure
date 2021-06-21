@@ -19,6 +19,7 @@ const registerUserRoute = require("./routes/register_user");
 const loginUserRoute = require("./routes/login_user");
 const passwordRoute = require("./routes/password_route");
 const userRoute = require("./routes/user_route");
+const categoryRoute = require("./routes/category_route")
 
 //CORS
 app.use(cors());
@@ -36,6 +37,7 @@ app.use(`${api}/user/register`, registerUserRoute);
 app.use(`${api}/user/login` , loginUserRoute);
 app.use(`${api}/password`, passwordRoute);
 app.use(`${api}/user`, userRoute);
+app.use(`${api}/category`,categoryRoute);
 //http://localhost:3000/api/v2/static/images/alp_icons/A.png   --- to get the image
 app.use(`${api}/static`, express.static('public'));
 
