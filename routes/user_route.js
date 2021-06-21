@@ -175,12 +175,6 @@ router.put("/remove-avatar/:id", verify, async (req, res) => {
   //url of the user avatar
   const avatar_url = user.avatar;
 
-  //Getting the name of the file in request
-  const fileName = req.file.filename;
-
-  //Base path url for the image/avatar
-  const basePath = `${req.protocol}://${req.get("host")}${api}/static/uploads/`;
-
   //checking for avatar present or not
   if (avatar_url == "") {
     return res.status(400).json({ message: "There is no profile picture" });
@@ -190,7 +184,7 @@ router.put("/remove-avatar/:id", verify, async (req, res) => {
   const updated_user = await User.findByIdAndUpdate(
     req.params.id,
     {
-      avatar: "",
+      avatar: req.body.avatar,
     },
     { new: true }
   );
