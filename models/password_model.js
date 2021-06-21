@@ -25,9 +25,13 @@ const passwordSchema = new mongoose.Schema({
     min: 5,
   },
   category: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Category",
     required: true,
-    min: 3,
+  },
+  image:{
+    type:String,
+    default:""
   },
   isImportant: {
     type: Boolean,
