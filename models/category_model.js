@@ -20,14 +20,18 @@ const categorySchema = new mongoose.Schema({
     ref: "User", //referencing User table
     required: true,
   },
+  isDefault:{
+      type:Boolean,
+      default:false
+  }
 });
 
 //Creating virtual id
-userSchema.virtual("id").get(function () {
+categorySchema.virtual("id").get(function () {
   return this._id.toHexString();
 });
 
-userSchema.set("toJSON", {
+categorySchema.set("toJSON", {
   virtuals: true,
 });
 
