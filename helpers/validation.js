@@ -83,6 +83,23 @@ const updateCategory = (data) => {
   return schema.validate(data);
 };
 
+//PASSWORD VALIDATION
+
+//new password validation
+const newPassword = (data) =>{
+  const schema = Joi.object({
+    title:Joi.string().max(20).min(2).required(),
+    username:Joi.string().required().default(""),
+    password:Joi.string().max(20).min(6).default(""),
+    emailId:Joi.string().email().default(""),
+    category:Joi.string().required(),
+    image:Joi.string().required(),
+    note:Joi.string().default(""),
+    userId:Joi.string().required(),
+  });
+  return schema.validate(data);
+}
+
 //Exporting modules
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
@@ -92,3 +109,4 @@ module.exports.changePassword = changePassword;
 module.exports.changeMasterPassword = changeMasterPassword;
 module.exports.newCategory = newCategory;
 module.exports.updateCategory = updateCategory;
+module.exports.newPassword = newPassword;
