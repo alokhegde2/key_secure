@@ -60,28 +60,6 @@ const changeMasterPassword = (data) => {
   return schema.validate(data);
 };
 
-//CATEGORY VALIDATION
-
-//validating new category
-const newCategory = (data) => {
-  const schema = Joi.object({
-    name: Joi.string().max(20).min(6).required(),
-    icon: Joi.string().default(""),
-    color: Joi.string().max(10),
-    user_id: Joi.string().required(),
-  });
-  return schema.validate(data);
-};
-
-//update category
-const updateCategory = (data) => {
-  const schema = Joi.object({
-    name: Joi.string().max(20).min(6),
-    icon: Joi.string().default(""),
-    color: Joi.string().max(10),
-  });
-  return schema.validate(data);
-};
 
 //PASSWORD VALIDATION
 
@@ -93,7 +71,6 @@ const newPassword = (data) =>{
     password:Joi.string().max(20).min(6).default(""),
     emailId:Joi.string().email().default(""),
     category:Joi.string().required(),
-    image:Joi.string().required(),
     note:Joi.string().default(""),
     userId:Joi.string().required(),
   });
@@ -107,6 +84,4 @@ module.exports.newMasterPasswordValidation = newMasterPasswordValidation;
 module.exports.resetMasterPasswordValidation = resetMasterPasswordValidation;
 module.exports.changePassword = changePassword;
 module.exports.changeMasterPassword = changeMasterPassword;
-module.exports.newCategory = newCategory;
-module.exports.updateCategory = updateCategory;
 module.exports.newPassword = newPassword;
