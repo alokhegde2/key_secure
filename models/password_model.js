@@ -1,3 +1,4 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
 
 //Schema
@@ -25,8 +26,7 @@ const passwordSchema = new mongoose.Schema({
     min: 5,
   },
   category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:"Category",
+    type: String,
     required: true,
   },
   image:{
