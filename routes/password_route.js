@@ -95,24 +95,11 @@ router.get("/get-password/:userId", verify, paginatedResults(Password), async (r
 
 //To get a single password
 //Using userId and passwordId
-router.get("/get-single-password/:passId/:userId", verify, async (req, res) => {
+router.get("/get-single-password/:passId", verify, async (req, res) => {
     //verify the object id's
     //passId validation
     if (!mongoose.isValidObjectId(req.params.passId)) {
         return res.status(400).json({ message: "Invalid password id" });
-    }
-
-    //userId validation
-    if (!mongoose.isValidObjectId(req.params.userId)) {
-        return res.status(400).json({ message: "Invalid user id" });
-    }
-
-    //checking for user is present or not
-    const user = await User.findById(req.params.userId);
-
-    //if user not found
-    if (!user) {
-        return res.status(400).json({ message: "User not found" });
     }
 
     //checking for the requested password is present or not
@@ -127,6 +114,10 @@ router.get("/get-single-password/:passId/:userId", verify, async (req, res) => {
     //return the password
     return res.status(200).json({ result: password })
 });
+
+
+//To update the single password
+//using password id and user id
 
 //Exporting the password module
 module.exports = router;
