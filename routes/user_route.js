@@ -11,6 +11,7 @@ const fs = require("fs");
 require("dotenv/config");
 
 //Importing user model
+const Password = require("../models/password_model");
 const User = require("../models/user_model");
 //importing verify package to verify
 const verify = require("../helpers/verify_token");
@@ -347,6 +348,34 @@ router.put("/change-master-pass/:id", verify, async (req, res) => {
   return res
     .status(200)
     .json({ message: "Master password updated successfuly" });
+});
+
+router.delete('/delete-user/:userId', verify, async (req, res) => {
+  //validating id
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).json({ message: "Invalid user id" });
+  }
+
+  //deleting user
+  const deletedUser = await User.findByIdAndRemove(req.params.userId);
+
+  //if user not deleted
+  if (!deletedUser) {
+    return res.status(400).json({ message: "User is not delted" });
+  }
+
+  //if user delted
+  //now we have to delete all the passwords related to that user
+  const deletedPassword = await Password.remove({ userId: req.params.userId });
+
+  //if passwords are not deleted
+  if (!deletedPassword) {
+    return res.status(400).json({ message: "Password/s not deleted" });
+  }
+
+  //if everything happened properly
+  return res.status(200).json({ message: "User Deleted" });
+
 });
 
 //Exporting login user
