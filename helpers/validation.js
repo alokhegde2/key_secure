@@ -72,6 +72,7 @@ const newPassword = (data) =>{
     emailId:Joi.string().email().default(""),
     category:Joi.string().required(),
     note:Joi.string().default(""),
+    image:Joi.string().default(""),
     userId:Joi.string().required(),
   });
   return schema.validate(data);
