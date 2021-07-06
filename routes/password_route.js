@@ -19,6 +19,9 @@ const paginatedResults = require("../helpers/pagination");
 //api url
 const api = process.env.API_URL;
 
+//image path initialization
+var image_path;
+
 //All password routes goes here
 
 //Creating new password
@@ -55,10 +58,10 @@ router.post("/new-password", verify, async (req, res) => {
 
     //checking for image url present in body
     //if not there
-    if (req.body.image == "") {
-        const image_path = `${req.protocol}://${req.get("host")}${api}/static/images/alp_icons/${first_char}.png`;
+    if (req.body.image == null || req.body.image == "") {
+        image_path = `${req.protocol}://${req.get("host")}${api}/static/images/alp_icons/${first_char}.png`;
     } else {
-        const image_path = req.body.image;
+        image_path = req.body.image;
     }
 
     //image path is
