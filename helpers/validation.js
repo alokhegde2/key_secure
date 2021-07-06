@@ -64,16 +64,30 @@ const changeMasterPassword = (data) => {
 //PASSWORD VALIDATION
 
 //new password validation
-const newPassword = (data) =>{
+const newPassword = (data) => {
   const schema = Joi.object({
-    title:Joi.string().max(20).min(2).required(),
-    username:Joi.string().required().default(""),
-    password:Joi.string().max(20).min(6).default(""),
-    emailId:Joi.string().email().default(""),
-    category:Joi.string().required(),
-    note:Joi.string().default(""),
-    image:Joi.string().default(""),
-    userId:Joi.string().required(),
+    title: Joi.string().max(20).min(2).required(),
+    username: Joi.string().required().default(""),
+    password: Joi.string().max(20).min(6).default(""),
+    emailId: Joi.string().email().default(""),
+    category: Joi.string().required(),
+    note: Joi.string().default(""),
+    image: Joi.string().default(""),
+    userId: Joi.string().required(),
+  });
+  return schema.validate(data);
+};
+
+//password updation
+const updatedPassword = (data) => {
+  const schema = Joi.object({
+    title: Joi.string().max(20).min(2).required(),
+    username: Joi.string().required().default(""),
+    password: Joi.string().max(20).min(6).default(""),
+    emailId: Joi.string().email().default(""),
+    category: Joi.string().required(),
+    note: Joi.string().default(""),
+    image: Joi.string().default(""),
   });
   return schema.validate(data);
 }
@@ -86,3 +100,4 @@ module.exports.resetMasterPasswordValidation = resetMasterPasswordValidation;
 module.exports.changePassword = changePassword;
 module.exports.changeMasterPassword = changeMasterPassword;
 module.exports.newPassword = newPassword;
+module.exports.updatedPassword = updatedPassword;

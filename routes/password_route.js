@@ -12,7 +12,7 @@ const User = require("../models/user_model");
 //importing verify middleware
 const verify = require("../helpers/verify_token");
 //importing validation
-const { newPassword } = require("../helpers/validation");
+const { newPassword, updatedPassword } = require("../helpers/validation");
 //importing pagination middleware
 const paginatedResults = require("../helpers/pagination");
 
@@ -117,7 +117,53 @@ router.get("/get-single-password/:passId", verify, async (req, res) => {
 
 
 //To update the single password
-//using password id and user id
+router.put('/update-password/:passId', verify, async (req, res) => {
+    //Validting password id
+    if (!mongoose.isValidObjectId(req.params.passId)) {
+        return res.status(400).json({ message: "Invalid password id" });
+    }
+
+    //if password id is valid
+    //now verify the req body
+    const { error } = updatedPassword(req.body);
+
+    //if there is any error
+    if (error) {
+        return res.status(400).json({ message: `${error.details[0].message}` })
+    }
+
+    //checking for image url present in body
+    //if not there
+    if (req.body.image == null || req.body.image == "") {
+        image_path = `${req.protocol}://${req.get("host")}${api}/static/images/alp_icons/${first_char}.png`;
+    } else {
+        image_path = req.body.image;
+    }
+
+    //if all data are correct 
+    //now we can update password
+    const updatedPass = await Password.findByIdAndUpdate(req.params.passId, {
+        title: req.body.title,
+        username: req.body.username,
+        password: req.body.password,
+        emailId: req.body.emailId,
+        category: req.body.category,
+        image: image_path,
+        note: req.body.note,
+    }, { new: true });
+
+    //check for updated or not 
+    //if not updated
+    if (!updatedPass) {
+        return res.status(400).json({ message: "Password is not updated" });
+    }
+
+    //if updated
+    return res.status(200).json({ message: "Password updated " })
+});
+
+
+//To delete the single password
 
 //Exporting the password module
 module.exports = router;
