@@ -33,7 +33,7 @@ app.use(morgan("tiny"));
 
 //All route middlewares goes here
 app.use(`${api}/user/register`, registerUserRoute);
-app.use(`${api}/user/login` , loginUserRoute);
+app.use(`${api}/user/login`, loginUserRoute);
 app.use(`${api}/password`, passwordRoute);
 app.use(`${api}/user`, userRoute);
 //http://localhost:3000/api/v2/static/images/alp_icons/A.png   --- to get the image
@@ -46,7 +46,8 @@ mongoose
     useUnifiedTopology: true,
     useCreateIndex: true,
     dbName: "Key-Secure-v2",
-  })
+    useFindAndModify: false
+  },)
   .then(() => {
     console.log("Database connection is ready");
   })
