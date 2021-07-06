@@ -164,6 +164,45 @@ router.put('/update-password/:passId', verify, async (req, res) => {
 
 
 //To delete the single password
+router.delete('/delete-password/:passId', verify, async (req, res) => {
+    //Validting password id
+    if (!mongoose.isValidObjectId(req.params.passId)) {
+        return res.status(400).json({ message: "Invalid password id" });
+    }
+
+    const deletedPassword = await Password.findByIdAndRemove(req.params.passId);
+
+    //checking for password deleted or not
+    if (!deletedPassword) {
+        return res.status(400).json({ message: "Password is not deleted" });
+    }
+    //if deleted
+    return res.status(200).json({ message: "Password deleted" });
+});
+
+
+//To delete many passwords
+router.delete('/delete-passwords', verify, async (req, res) => {
+    //Getting all ids need to be deleted
+    const data = req.body.id;
+
+    //deleting all records selected
+
+    const deletedPasswords = await Password.deleteMany({
+        _id: {
+            $in: data
+        }
+    });
+
+    //checking for deleted or not 
+    if (!deletedPasswords) {
+        return res.status(400).json({ message: "Passwords are not deleted" })
+    }
+
+    return res.status(200).json({ message: "Passwords Deleted" })
+
+})
+
 
 //Exporting the password module
 module.exports = router;
