@@ -359,9 +359,41 @@ router.delete('/delete-user/:userId', verify, async (req, res) => {
   //deleting user
   const deletedUser = await User.findByIdAndRemove(req.params.userId);
 
+  //getting avatar url
+  const avatar_url = deletedUser.avatar;
+
   //if user not deleted
   if (!deletedUser) {
     return res.status(400).json({ message: "User is not delted" });
+  }
+
+
+  //if avatar_url is not empty we'll delete it
+  //to remove old entries
+  if (avatar_url != "") {
+    //if user is updated it will also update the avatar
+    //if only user name is updated there will be duplicate entry of the avatar
+    //to delete the older entry,
+    //we are split the url in "/" and it devide url in to 8 array element
+    //7th position is the image name
+    const image_name = avatar_url.split("/")[7];
+
+    //Here we are finding path of the image
+    //using it we can delete it
+    const image_path = path.join(
+      __dirname,
+      "../",
+      `/public/uploads/${image_name}`
+    );
+
+    //we are trying to delete the older entry
+    //by using fs.unlink()
+    try {
+      fs.unlinkSync(image_path);
+      //file removed
+    } catch (err) {
+      return res.status(400).json({ message: "Old avatar not deleted" });
+    }
   }
 
   //if user delted
