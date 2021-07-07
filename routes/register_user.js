@@ -93,6 +93,11 @@ router.put("/new-master-pass/:mail", async (req, res) => {
     return res.status(400).json({ message: "Invalid email" });
   }
 
+  //check for user has already created master pass
+  if(user.masterPassword != ""){
+    return res.status(400).json({message:"MasterPassword already created"});
+  }
+
   //Hashing the masterPassword
   //creating salt for hashing
   const salt = await bcrypt.genSalt(10);

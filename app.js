@@ -47,7 +47,7 @@ mongoose
     useCreateIndex: true,
     dbName: "Key-Secure-v2",
     useFindAndModify: false
-  },)
+  })
   .then(() => {
     console.log("Database connection is ready");
   })
@@ -59,6 +59,6 @@ mongoose
 const port = process.env.PORT || 3000;
 
 //Running server
-app.listen(port, () => {
+app.listen(port, "192.168.43.173", () => {
   console.log(`Server is running at port ${port} ...`);
 });

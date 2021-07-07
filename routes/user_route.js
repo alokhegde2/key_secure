@@ -134,8 +134,8 @@ router.put(
       //if only user name is updated there will be duplicate entry of the avatar
       //to delete the older entry,
       //we are split the url in "/" and it devide url in to 8 array element
-      //7th position is the image name
-      const image_name = avatar_url.split("/")[7];
+      //8th position is the image name
+      const image_name = avatar_url.split("/")[8];
 
       //Here we are finding path of the image
       //using it we can delete it
@@ -202,8 +202,8 @@ router.put("/remove-avatar/:id", verify, async (req, res) => {
     //if only user name is updated there will be duplicate entry of the avatar
     //to delete the older entry,
     //we are split the url in "/" and it devide url in to 8 array element
-    //7th position is the image name
-    const image_name = avatar_url.split("/")[7];
+    //8th position is the image name
+    const image_name = avatar_url.split("/")[8];
 
     //Here we are finding path of the image
     //using it we can delete it
@@ -375,8 +375,8 @@ router.delete('/delete-user/:userId', verify, async (req, res) => {
     //if only user name is updated there will be duplicate entry of the avatar
     //to delete the older entry,
     //we are split the url in "/" and it devide url in to 8 array element
-    //7th position is the image name
-    const image_name = avatar_url.split("/")[7];
+    //8th position is the image name
+    const image_name = avatar_url.split("/")[8];
 
     //Here we are finding path of the image
     //using it we can delete it
