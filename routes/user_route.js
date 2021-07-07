@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
     if (isValid) {
       uploadError = null;
     }
-    cb(uploadError, "./public/uploads");
+    cb(uploadError, "./public/uploads/user_avatar");
   },
   filename: function (req, file, cb) {
     const fileName = file.originalname.split(" ").join("-");
@@ -110,7 +110,7 @@ router.put(
     //Base path url for the image/avatar
     const basePath = `${req.protocol}://${req.get(
       "host"
-    )}${api}/static/uploads/`;
+    )}${api}/static/uploads/user_avatar/`;
 
     //Updating user name and avatar
     const updated_user = await User.findByIdAndUpdate(
@@ -142,7 +142,7 @@ router.put(
       const image_path = path.join(
         __dirname,
         "../",
-        `/public/uploads/${image_name}`
+        `/public/uploads/user_avatar/${image_name}`
       );
 
       //we are trying to delete the older entry
@@ -210,7 +210,7 @@ router.put("/remove-avatar/:id", verify, async (req, res) => {
     const image_path = path.join(
       __dirname,
       "../",
-      `/public/uploads/${image_name}`
+      `/public/uploads/user_avatar/${image_name}`
     );
 
     //we are trying to delete the older entry
@@ -383,7 +383,7 @@ router.delete('/delete-user/:userId', verify, async (req, res) => {
     const image_path = path.join(
       __dirname,
       "../",
-      `/public/uploads/${image_name}`
+      `/public/uploads/user_avatar/${image_name}`
     );
 
     //we are trying to delete the older entry
