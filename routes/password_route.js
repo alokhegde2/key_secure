@@ -58,7 +58,7 @@ router.post("/new-password", verify, async (req, res) => {
 
     //checking for image url present in body
     //if not there
-    if (req.body.image == null || req.body.image == "") {
+    if (req.body.image == null || req.body.image == " ") {
         image_path = `${req.protocol}://${req.get("host")}${api}/static/images/alp_icons/${first_char}.png`;
     } else {
         image_path = req.body.image;
