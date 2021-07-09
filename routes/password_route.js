@@ -201,7 +201,50 @@ router.delete('/delete-passwords', verify, async (req, res) => {
 
     return res.status(200).json({ message: "Passwords Deleted" })
 
-})
+});
+
+//To get the app icons
+router.get('/get-icons', verify, async (req, res) => {
+    const baseUrl = `${req.protocol}://${req.get(
+        "host"
+    )}${api}/static/images/icons/`;
+    var data = {
+        "affinity": `${baseUrl}/affinity.png`,
+        "amazon": `${baseUrl}/amazon.png`,
+        "applepay": `${baseUrl}/applepay.png`,
+        "behance": `${baseUrl}/behance.png`,
+        "digitalocean": `${baseUrl}/digitalocean.png`,
+        "docker": `${baseUrl}/docker.png`,
+        "dribbble": `${baseUrl}/dribbble.png`,
+        "dropbox": `${baseUrl}/dropbox.png`,
+        "facebook": `${baseUrl}/facebook.png`,
+        "github": `${baseUrl}/github.png`,
+        "google": `${baseUrl}/google.png`,
+        "gpay": `${baseUrl}/gpay.png`,
+        "instagram": `${baseUrl}/instagram.png`,
+        "linkedin": `${baseUrl}/linkedin.png`,
+        "medium": `${baseUrl}/medium.png`,
+        "messenger": `${baseUrl}/messenger.png`,
+        "microsoft": `${baseUrl}/microsoft.png`,
+        "netflix": `${baseUrl}/netflix.png`,
+        "paypal": `${baseUrl}/paypal.png`,
+        "pinterest": `${baseUrl}/pinterest.png`,
+        "prime": `${baseUrl}/prime.png`,
+        "sketch": `${baseUrl}/sketch.png`,
+        "slack": `${baseUrl}/slack.png`,
+        "snapchat": `${baseUrl}/snapchat.png`,
+        "spotify": `${baseUrl}/spotify.png`,
+        "stackoverflow": `${baseUrl}/stackoverflow.png`,
+        "tumbler": `${baseUrl}/tumbler.png`,
+        "twitch": `${baseUrl}/twitch.png`,
+        "twitter": `${baseUrl}/twitter.png`,
+        "whatsapp": `${baseUrl}/whatsapp.png`,
+        "wordpress": `${baseUrl}/wordpress.png`,
+        "youtube": `${baseUrl}/youtube.png`
+    }
+
+    return res.status(200).json({ "icons": data });
+});
 
 
 //Exporting the password module
