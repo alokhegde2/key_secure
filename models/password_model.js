@@ -17,12 +17,10 @@ const passwordSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
     min: 8,
   },
   emailId: {
     type: String,
-    required: true,
     min: 5,
   },
   category: {

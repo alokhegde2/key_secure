@@ -67,12 +67,12 @@ const changeMasterPassword = (data) => {
 const newPassword = (data) => {
   const schema = Joi.object({
     title: Joi.string().max(20).min(2).required(),
-    username: Joi.string().required().default(""),
-    password: Joi.string().max(20).min(6).default(""),
-    emailId: Joi.string().email().default(""),
-    category: Joi.string().required(),
-    note: Joi.string().default(""),
-    image: Joi.string().default(""),
+    username: Joi.string().allow(null,""),
+    password: Joi.string().allow(null,"").max(20).min(6),
+    emailId: Joi.string().allow(null,"").email(),
+    category : Joi.string().required(),
+    note: Joi.string().allow(null,"").default(""),
+    image: Joi.string().allow(null,""),
     userId: Joi.string().required(),
   });
   return schema.validate(data);
