@@ -139,11 +139,24 @@ router.put('/update-password/:passId', verify, async (req, res) => {
 
     //checking for image url present in body
     //if not there
+    const title = req.body.title;
+
+    //to get first charecter
+    const first_char = title[0].toUpperCase();
+
+    //checking for image url present in body
+    //if not there
+    var data = [`affinity`, `amazon`, `applepay`, `behance`, `digitalocean`, `docker`, `dribbble`, `dropbox`, `facebook`, `github`, `google`, `gpay`, `instagram`, `linkedin`, `medium`, `messenger`, `microsoft`, `netflix`, `paypal`, `pinterest`, `prime`, `sketch`, `slack`, `snapchat`, `spotify`, `stackoverflow`, `tumbler`, `twitch`, `twitter`, `whatsapp`, `wordpress`, `youtube`, `other`]
     if (req.body.image == null || req.body.image == "") {
-        image_path = `${req.protocol}://${req.get("host")}${api}/static/images/alp_icons/${first_char}.png`;
+        if (data.find(e => e == title.toLowerCase().split(" ").join(""))) {
+            image_path = `${req.protocol}://${req.get("host")}${api}/static/images/icons/${title.toLowerCase().split(" ").join("")}.png`
+        } else {
+            image_path = `${req.protocol}://${req.get("host")}${api}/static/images/alp_icons/${first_char}.png`;
+        }
     } else {
         image_path = req.body.image;
     }
+
 
     //if all data are correct 
     //now we can update password
