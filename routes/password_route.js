@@ -180,6 +180,29 @@ router.put('/update-password/:passId', verify, async (req, res) => {
     return res.status(200).json({ message: "Password updated " })
 });
 
+//To toggle isImportant of password
+router.put('/update-password/important/:passId', verify, async (req, res) => {
+    //Validting password id
+    if (!mongoose.isValidObjectId(req.params.passId)) {
+        return res.status(400).json({ message: "Invalid password id" });
+    }
+
+    const updatePassword = await Password.findByIdAndUpdate(
+        req.params.passId,
+        {
+            isImportant: req.body.isImportant,
+        },
+        { new: true }
+    );
+
+    //if password is not updated
+    if (!updatedPassword) {
+        return res.status(400).json({ message: "Unable to add/remove from important" });
+    }
+
+    return res.status(200).json({ message: "Added/Removed from important" });
+});
+
 
 //To delete the single password
 router.delete('/delete-password/:passId', verify, async (req, res) => {
