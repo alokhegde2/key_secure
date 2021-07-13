@@ -196,7 +196,7 @@ router.put('/update-password/important/:passId', verify, async (req, res) => {
     );
 
     //if password is not updated
-    if (!updatedPassword) {
+    if (!updatePassword) {
         return res.status(400).json({ message: "Unable to add/remove from important" });
     }
 
