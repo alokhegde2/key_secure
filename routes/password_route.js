@@ -58,7 +58,7 @@ router.post("/new-password", verify, async (req, res) => {
 
     //checking for image url present in body
     //if not there
-    var data = [`affinity`, `amazon`, `applepay`, `behance`, `digitalocean`, `docker`, `dribbble`, `dropbox`, `facebook`, `github`, `google`, `gpay`, `instagram`, `linkedin`, `medium`, `messenger`, `microsoft`, `netflix`, `paypal`, `pinterest`, `prime`, `sketch`, `slack`, `snapchat`, `spotify`, `stackoverflow`, `tumbler`, `twitch`, `twitter`, `whatsapp`, `wordpress`, `youtube`, `other`]
+    var data = [`affinity`, `amazon`, `applepay`, `behance`, `digitalocean`, `docker`, `dribbble`, `dropbox`, `facebook`, `github`, `google`, `gpay`, `instagram`, `linkedin`, `medium`, `messenger`, `microsoft`, `netflix`, `paypal`, `pinterest`, `prime`, `sketch`,`skype`, `slack`, `snapchat`, `spotify`, `stackoverflow`, `tumbler`, `twitch`, `twitter`, `whatsapp`, `wordpress`, `youtube`, `other`]
     if (req.body.image == null || req.body.image == "") {
         if (data.find(e => e == title.toLowerCase().split(" ").join(""))) {
             image_path = `${req.protocol}://${req.get("host")}${api}/static/images/icons/${title.toLowerCase().split(" ").join("")}.png`
