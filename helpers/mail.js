@@ -82,7 +82,7 @@ module.exports = async function SendMail(
   //Admin mail and password
   const admin_mail = process.env.MAIL_ID;
   const admin_pass = process.env.PASSWORD;
-  console.log(admin_mail, admin_pass);
+  // console.log(admin_mail, admin_pass);
 
   let transporter = nodemailer.createTransport({
     // host: "mail.google.com",
@@ -103,10 +103,10 @@ module.exports = async function SendMail(
     html: body, // html body
   });
 
-  console.log("Message sent: %s", info.messageId);
+  // console.log("Message sent: %s", info.messageId);
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
   // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 };

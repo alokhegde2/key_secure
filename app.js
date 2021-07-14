@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const compression = require("compression");
 
 //importing dot env
 require("dotenv/config");
@@ -23,6 +24,8 @@ const userRoute = require("./routes/user_route");
 //CORS
 app.use(cors());
 app.options("*", cors());
+
+app.use(compression());
 
 //Middlewares
 //Middleware to serve static files
