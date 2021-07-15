@@ -290,7 +290,7 @@ router.put("/remove-avatar/:id", verify, async (req, res) => {
   const updated_user = await User.findByIdAndUpdate(
     req.params.id,
     {
-      avatar: req.body.avatar,
+      avatar: "",
     },
     { new: true }
   );
