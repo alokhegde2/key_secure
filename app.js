@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const compression = require("compression");
+const helmet = require('helmet');
 
 //importing dot env
 require("dotenv/config");
@@ -32,6 +33,8 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 app.use(morgan("tiny"));
+//Always use helmet for safety
+app.use(helmet());
 
 //All route middlewares goes here
 app.use(`${api}/user/register`, registerUserRoute);
